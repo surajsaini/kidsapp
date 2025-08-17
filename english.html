@@ -52,12 +52,12 @@
             <h3>🎮 Learning Controls</h3>
             
             <div class="control-group">
-                <label for="search-bar">🔍 Search Words:</label>
+                <label for="search-bar">Search Words:</label>
                 <input type="text" id="search-bar" class="search-bar" placeholder="Type to search words or phonics...">
             </div>
 
             <div class="control-group">
-                <label for="filter-select">📂 Filter by Category:</label>
+                <label for="filter-select">Filter by Category:</label>
                 <select id="filter-select" class="filter-select">
                     <option value="all">All Words</option>
                     <!-- Options will be populated by JavaScript -->
@@ -68,13 +68,12 @@
                 <button id="random-words-btn" class="btn">🎲 Show 10 Random Words</button>
                 <button id="history-btn" class="btn secondary">📝 Show Last 10 Clicked</button>
                 <button id="show-all-btn" class="btn primary">📋 Show All 500+ Words</button>
-                <button id="start-game-btn" class="btn game">🎮 Start Word Game</button>
             </div>
         </section>
 
         <!-- Words Container -->
         <section class="words-container fade-in">
-            <h3>📝 English Words Collection (500+ words)</h3>
+            <h3>📝 English Words Collection</h3>
             <div id="words-grid" class="words-grid">
                 <div class="loading">Loading words...</div>
             </div>
@@ -129,6 +128,12 @@
         </section>
     </main>
 
+    <!-- Floating Game Button -->
+    <button class="floating-game-btn" id="floating-game-btn" title="Play English Word Games!">
+        <span>🎮</span>
+        <span>Word Game</span>
+    </button>
+
     <!-- Word Game Modal -->
     <div id="game-modal" class="game-modal">
         <div class="game-container">
@@ -174,5 +179,21 @@
     </footer>
 
     <script src="js/app.js"></script>
+    <script>
+        // Auto-open game modal if coming from index page
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('autoGame') === 'true') {
+                // Wait a bit for the app to fully initialize
+                setTimeout(() => {
+                    if (window.wordApp && window.wordApp.startWordGame) {
+                        window.wordApp.startWordGame();
+                        // Clean up URL parameter
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                }, 800);
+            }
+        });
+    </script>
 </body>
 </html>

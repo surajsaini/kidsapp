@@ -245,6 +245,8 @@ main {
     border-radius: 10px;
     font-size: 1rem;
     font-family: inherit;
+    background: white;
+    color: #333;
 }
 
 .search-bar:focus, .filter-select:focus {
@@ -801,4 +803,70 @@ footer {
     font-size: 1.3rem;
     color: #666;
     margin-bottom: 2rem;
+}
+
+/* Floating Game Button */
+.floating-game-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 160px;
+    height: 55px;
+    background: linear-gradient(45deg, #FF9800, #E91E63);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    animation: pulseGame 2s infinite;
+    font-family: 'Verdana', Geneva, Tahoma, sans-serif;
+    white-space: nowrap;
+}
+
+.floating-game-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(255, 152, 0, 0.6);
+    background: linear-gradient(45deg, #F57C00, #C2185B);
+}
+
+.floating-game-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes pulseGame {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Mobile optimization for floating button */
+@media (max-width: 768px) {
+    .floating-game-btn {
+        width: 145px;
+        height: 50px;
+        bottom: 35px;
+        right: 15px;
+        font-size: 1.2rem;
+        gap: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-game-btn {
+        width: 135px;
+        height: 45px;
+        bottom: 30px;
+        right: 10px;
+        font-size: 1.1rem;
+        gap: 5px;
+    }
 }

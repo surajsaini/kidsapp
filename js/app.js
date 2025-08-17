@@ -177,9 +177,10 @@ class WordLearningApp {
             showAllBtn.addEventListener('click', () => this.showAllWords());
         }
 
-        const startGameBtn = document.getElementById('start-game-btn');
-        if (startGameBtn) {
-            startGameBtn.addEventListener('click', () => this.startWordGame());
+        // Floating game button
+        const floatingGameBtn = document.getElementById('floating-game-btn');
+        if (floatingGameBtn) {
+            floatingGameBtn.addEventListener('click', () => this.startWordGame());
         }
 
         // Current word display click to repeat

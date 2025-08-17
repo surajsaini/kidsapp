@@ -25,7 +25,7 @@
 </head>
 <body>
     <header>
-        <h1>🇫🇷 Mots Français Canadiens 🇫🇷</h1>
+        <h1>🇫🇷 Mots Français Canadiens</h1>
         <p>Cliquez sur les mots pour les entendre!</p>
     </header>
 
@@ -52,12 +52,12 @@
             <h3>🎮 Contrôles d'Apprentissage</h3>
             
             <div class="control-group">
-                <label for="search-bar">🔍 Rechercher des Mots:</label>
+                <label for="search-bar">Rechercher des Mots:</label>
                 <input type="text" id="search-bar" class="search-bar" placeholder="Tapez pour rechercher des mots ou phonétique...">
             </div>
 
             <div class="control-group">
-                <label for="filter-select">📂 Filtrer par Catégorie:</label>
+                <label for="filter-select">Filtrer par Catégorie:</label>
                 <select id="filter-select" class="filter-select">
                     <option value="all">Tous les Mots</option>
                     <!-- Options will be populated by JavaScript -->
@@ -68,13 +68,12 @@
                 <button id="random-words-btn" class="btn">🎲 Afficher 10 Mots Aléatoires</button>
                 <button id="history-btn" class="btn secondary">📝 Afficher les 10 Derniers</button>
                 <button id="show-all-btn" class="btn primary">📋 Afficher Tous les 500+ Mots</button>
-                <button id="start-game-btn" class="btn game-btn">🎮 Commencer le Jeu de Mots</button>
             </div>
         </section>
 
         <!-- Words Container -->
         <section class="words-container fade-in">
-            <h3>📝 Collection de Mots Français (500+ mots)</h3>
+            <h3>📝 Collection de Mots Français</h3>
             <div id="words-grid" class="words-grid">
                 <div class="loading">Chargement des mots...</div>
             </div>
@@ -142,6 +141,12 @@
             </div>
         </section>
     </main>
+
+    <!-- Floating Game Button -->
+    <button class="floating-game-btn" id="floating-game-btn" title="Jouer aux Jeux de Mots Français!">
+        <span>🎮</span>
+        <span>Jeu de Mots</span>
+    </button>
 
     <footer>
         <p>&copy; 2025 Word Learning for Kids. Soutenant l'alphabétisation française canadienne! 🇫🇷</p>
