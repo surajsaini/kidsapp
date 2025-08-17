@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mots Français Canadiens 3-4 Lettres - Apprentissage Interactif pour Enfants</title>
+    <meta name="description" content="Apprenez 500+ mots français canadiens de 3-4 lettres avec prononciation interactive, phonétique, et jeux éducatifs amusants. Parfait pour les enfants de 3-8 ans.">
+    <meta name="keywords" content="mots français canadiens, 3 lettres, 4 lettres, phonétique enfants, prononciation, lecture, digrammes, mélanges, voyelles, consonnes">
+    <meta name="author" content="Word Learning for Kids">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mots Français pour Enfants - Apprentissage Interactif">
+    <meta property="og:description" content="500+ mots français avec prononciation et phonétique pour jeunes apprenants!">
+    <meta property="og:url" content="/french.html">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Mots Français pour Enfants">
+    <meta property="twitter:description" content="Apprentissage interactif des mots français avec prononciation et phonétique!">
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+    <header>
+        <h1>🇫🇷 Mots Français Canadiens 🇫🇷</h1>
+        <p>Cliquez sur les mots pour les entendre! 🔊</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Accueil</a></li>
+            <li><a href="english.html">🇨🇦 Mots Anglais</a></li>
+            <li><a href="french.html" class="active">🇫🇷 Mots Français</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Current Word Display -->
+        <section class="current-word-display fade-in">
+            <div class="current-word">Cliquez sur un mot pour l'entendre!</div>
+            <div class="current-phonics"></div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+                💡 <strong>Astuce:</strong> Cliquez sur le mot ci-dessus pour répéter la prononciation!
+            </p>
+        </section>
+
+        <!-- Controls Section -->
+        <section class="controls fade-in">
+            <h3>🎮 Contrôles d'Apprentissage</h3>
+            
+            <div class="control-group">
+                <label for="search-bar">🔍 Rechercher des Mots:</label>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Tapez pour rechercher des mots ou phonétique...">
+            </div>
+
+            <div class="control-group">
+                <label for="filter-select">📂 Filtrer par Catégorie:</label>
+                <select id="filter-select" class="filter-select">
+                    <option value="all">Tous les Mots</option>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <div class="control-buttons">
+                <button id="random-words-btn" class="btn">🎲 Afficher 10 Mots Aléatoires</button>
+                <button id="history-btn" class="btn secondary">📝 Afficher les 10 Derniers</button>
+                <button id="show-all-btn" class="btn primary">📋 Afficher Tous les 500+ Mots</button>
+                <button id="start-game-btn" class="btn game-btn">🎮 Commencer le Jeu de Mots</button>
+            </div>
+        </section>
+
+        <!-- Words Container -->
+        <section class="words-container fade-in">
+            <h3>📝 Collection de Mots Français (500+ mots)</h3>
+            <div id="words-grid" class="words-grid">
+                <div class="loading">Chargement des mots...</div>
+            </div>
+        </section>
+
+        <!-- Educational Information -->
+        <section class="info-section fade-in" style="margin-top: 2rem;">
+            <h2>📖 À Propos des Catégories de Mots Français</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                <div style="background: #fff3e0; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #FF9800;">🔤 Mots Simples</h3>
+                    <p>Mots de base comme <strong>ami</strong>, <strong>bon</strong>, <strong>rue</strong>. Parfait pour les débutants en lecture!</p>
+                </div>
+                
+                <div style="background: #e8f5e8; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #4CAF50;">📝 Digrammes</h3>
+                    <p>Deux lettres qui font un son: <strong>ch</strong> (chat), <strong>ph</strong> (photo), <strong>th</strong> (thé), <strong>gn</strong> (ligne).</p>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #2196F3;">🎯 Mélanges</h3>
+                    <p>Groupes de consonnes: <strong>bl</strong> (bleu), <strong>cl</strong> (clé), <strong>tr</strong> (trois), <strong>pr</strong> (prix). Chaque son de lettre est entendu!</p>
+                </div>
+                
+                <div style="background: #f3e5f5; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #9C27B0;">👥 Équipes de Voyelles</h3>
+                    <p>Deux voyelles travaillant ensemble: <strong>eau</strong> (bateau), <strong>ou</strong> (loup), <strong>oi</strong> (roi), <strong>ai</strong> (pain).</p>
+                </div>
+                
+                <div style="background: #fff9c4; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #F57F17;">🔇 Lettres Muettes</h3>
+                    <p>Lettres qu'on ne prononce pas: <strong>temps</strong>, <strong>doigt</strong>, <strong>vingt</strong>. Important en français!</p>
+                </div>
+                
+                <div style="background: #fce4ec; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #E91E63;">🔀 Consonnes Doubles</h3>
+                    <p>Consonnes répétées: <strong>bille</strong>, <strong>motte</strong>, <strong>bulle</strong>. Sons spéciaux français!</p>
+                </div>
+            </div>
+            
+            <div style="background: #f5f5f5; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+                <h3 style="color: #333;">🎓 Avantages Éducatifs</h3>
+                <ul style="text-align: left; max-width: 800px; margin: 1rem auto;">
+                    <li><strong>Conscience Phonémique:</strong> Comprendre les relations lettre-son</li>
+                    <li><strong>Construction de Vocabulaire:</strong> Élargir les connaissances des mots par catégories</li>
+                    <li><strong>Fluidité de Lecture:</strong> Compétences de reconnaissance rapide des mots</li>
+                    <li><strong>Modèles d'Orthographe:</strong> Apprendre les règles d'orthographe françaises communes</li>
+                    <li><strong>Prononciation:</strong> Prononciation française canadienne correcte</li>
+                    <li><strong>Apprentissage Auto-rythmé:</strong> Les enfants apprennent à leur propre vitesse</li>
+                </ul>
+            </div>
+            
+            <div style="background: #e8f4fd; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+                <h3 style="color: #1976D2;">🇫🇷 Particularités du Français Canadien</h3>
+                <p>
+                    Notre collection inclut des mots spécifiquement choisis pour refléter le français canadien, 
+                    avec des prononciations authentiques et des mots couramment utilisés au Canada. 
+                    Les enfants apprendront le français tel qu'il est parlé au Québec et dans les 
+                    communautés francophones du Canada.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Caractéristiques spéciales:</strong> Voyelles nasales, R roulé québécois, 
+                    intonation particulière, et vocabulaire propre au français nord-américain.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Word Learning for Kids. Soutenant l'alphabétisation française canadienne! 🇫🇷</p>
+    </footer>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="game-modal">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>🎮 Jeu de Mots Français</h2>
+                <div class="game-stats">
+                    <span class="score">Score: <span id="game-score">0/10</span></span>
+                    <span class="timer">⏰ <span id="game-timer">10</span>s</span>
+                    <button id="close-game" class="close-btn">✕</button>
+                </div>
+            </div>
+            
+            <div class="game-content">
+                <div class="word-display">
+                    <div class="current-game-word" id="game-word">_AT</div>
+                    <button id="listen-again-btn" class="listen-btn">🔊 Écouter à nouveau</button>
+                </div>
+                
+                <div class="letter-options">
+                    <button class="letter-option" data-letter="A">A</button>
+                    <button class="letter-option" data-letter="E">E</button>
+                    <button class="letter-option" data-letter="H">H</button>
+                    <button class="letter-option" data-letter="O">O</button>
+                </div>
+                
+                <div class="game-feedback" id="game-feedback">
+                    <!-- Feedback messages appear here -->
+                </div>
+            </div>
+            
+            <div class="game-results" id="game-results" style="display: none;">
+                <h3>🎉 Jeu Terminé!</h3>
+                <div class="final-score">Score Final: <span id="final-score">0/10</span></div>
+                <div class="results-message" id="results-message">Excellent travail!</div>
+                <button id="play-again-btn" class="btn primary">🎮 Rejouer</button>
+                <button id="close-results-btn" class="btn secondary">❌ Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

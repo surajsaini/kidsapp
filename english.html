@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian English 3-4 Letter Words - Interactive Learning for Kids</title>
+    <meta name="description" content="Learn 500+ Canadian English 3-4 letter words with interactive pronunciation, phonics, and fun educational games. Perfect for kids aged 3-8 learning to read.">
+    <meta name="keywords" content="Canadian English words, 3 letter words, 4 letter words, kids phonics, pronunciation, reading, digraphs, blends, magic e, consonant clusters, vowel teams">
+    <meta name="author" content="Word Learning for Kids">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Canadian English Words for Kids - Interactive Learning">
+    <meta property="og:description" content="500+ English words with pronunciation and phonics for young learners!">
+    <meta property="og:url" content="/english.html">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Canadian English Words for Kids">
+    <meta property="twitter:description" content="Interactive English word learning with pronunciation and phonics!">
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+    <header>
+        <h1>🇨🇦 Canadian English Words 🇨🇦</h1>
+        <p>Click words to hear them pronounced! 🔊</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="english.html" class="active">🇨🇦 English Words</a></li>
+            <li><a href="french.html">🇫🇷 French Words</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Current Word Display -->
+        <section class="current-word-display fade-in">
+            <div class="current-word">Click a word to hear it!</div>
+            <div class="current-phonics"></div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+                💡 <strong>Tip:</strong> Click the word above to repeat pronunciation!
+            </p>
+        </section>
+
+        <!-- Controls Section -->
+        <section class="controls fade-in">
+            <h3>🎮 Learning Controls</h3>
+            
+            <div class="control-group">
+                <label for="search-bar">🔍 Search Words:</label>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Type to search words or phonics...">
+            </div>
+
+            <div class="control-group">
+                <label for="filter-select">📂 Filter by Category:</label>
+                <select id="filter-select" class="filter-select">
+                    <option value="all">All Words</option>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <div class="control-buttons">
+                <button id="random-words-btn" class="btn">🎲 Show 10 Random Words</button>
+                <button id="history-btn" class="btn secondary">📝 Show Last 10 Clicked</button>
+                <button id="show-all-btn" class="btn primary">📋 Show All 500+ Words</button>
+                <button id="start-game-btn" class="btn game">🎮 Start Word Game</button>
+            </div>
+        </section>
+
+        <!-- Words Container -->
+        <section class="words-container fade-in">
+            <h3>📝 English Words Collection (500+ words)</h3>
+            <div id="words-grid" class="words-grid">
+                <div class="loading">Loading words...</div>
+            </div>
+        </section>
+
+        <!-- Educational Information -->
+        <section class="info-section fade-in" style="margin-top: 2rem;">
+            <h2>📖 About English Word Categories</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                <div style="background: #fff3e0; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #FF9800;">🔤 Simple Words</h3>
+                    <p>Basic CVC (consonant-vowel-consonant) words like <strong>cat</strong>, <strong>dog</strong>, <strong>run</strong>. Perfect for beginning readers!</p>
+                </div>
+                
+                <div style="background: #e8f5e8; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #4CAF50;">📝 Digraphs</h3>
+                    <p>Two letters that make one sound: <strong>sh</strong> (ship), <strong>ch</strong> (chat), <strong>th</strong> (that), <strong>ph</strong> (phone), <strong>wh</strong> (when).</p>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #2196F3;">🎯 Trigraphs</h3>
+                    <p>Three letters, one sound: <strong>tch</strong> (catch), <strong>igh</strong> (light), <strong>dge</strong> (bridge). Advanced phonics patterns!</p>
+                </div>
+                
+                <div style="background: #f3e5f5; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #9C27B0;">🔀 Blends</h3>
+                    <p>Consonant clusters: <strong>bl</strong> (blue), <strong>st</strong> (stop), <strong>spr</strong> (spring). Each letter sound is heard!</p>
+                </div>
+                
+                <div style="background: #fff9c4; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #F57F17;">👥 Vowel Teams</h3>
+                    <p>Two vowels working together: <strong>ea</strong> (bean), <strong>oa</strong> (boat), <strong>ai</strong> (rain), <strong>ee</strong> (tree).</p>
+                </div>
+                
+                <div style="background: #fce4ec; padding: 1.5rem; border-radius: 15px;">
+                    <h3 style="color: #E91E63;">✨ Magic E</h3>
+                    <p>Silent 'e' changes vowel sounds: <strong>hop</strong> → <strong>hope</strong>, <strong>cap</strong> → <strong>cape</strong>. Like magic!</p>
+                </div>
+            </div>
+            
+            <div style="background: #f5f5f5; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+                <h3 style="color: #333;">🎓 Educational Benefits</h3>
+                <ul style="text-align: left; max-width: 800px; margin: 1rem auto;">
+                    <li><strong>Phonemic Awareness:</strong> Understanding letter-sound relationships</li>
+                    <li><strong>Vocabulary Building:</strong> Expanding word knowledge through categories</li>
+                    <li><strong>Reading Fluency:</strong> Quick word recognition skills</li>
+                    <li><strong>Spelling Patterns:</strong> Learning common English spelling rules</li>
+                    <li><strong>Pronunciation:</strong> Correct Canadian English pronunciation</li>
+                    <li><strong>Self-Paced Learning:</strong> Children learn at their own speed</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Word Game Modal -->
+    <div id="game-modal" class="game-modal">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>🎮 Fill in the Missing Letters!</h2>
+                <div class="game-stats">
+                    <span class="score">Score: <span id="game-score">0/10</span></span>
+                    <span class="timer">⏰ <span id="game-timer">10</span>s</span>
+                    <button id="close-game" class="close-btn">✕</button>
+                </div>
+            </div>
+            
+            <div class="game-content">
+                <div class="word-display">
+                    <div class="current-game-word" id="game-word">_AT</div>
+                    <button id="listen-again-btn" class="listen-btn">🔊 Listen Again</button>
+                </div>
+                
+                <div class="letter-options">
+                    <button class="letter-option" data-letter="C">C</button>
+                    <button class="letter-option" data-letter="B">B</button>
+                    <button class="letter-option" data-letter="H">H</button>
+                    <button class="letter-option" data-letter="M">M</button>
+                </div>
+                
+                <div class="game-feedback" id="game-feedback">
+                    <!-- Feedback messages appear here -->
+                </div>
+            </div>
+            
+            <div class="game-results" id="game-results" style="display: none;">
+                <h3>🎉 Game Complete!</h3>
+                <div class="final-score">Final Score: <span id="final-score">0/10</span></div>
+                <div class="results-message" id="results-message">Great job!</div>
+                <button id="play-again-btn" class="btn primary">🎮 Play Again</button>
+                <button id="close-results-btn" class="btn secondary">❌ Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Word Learning for Kids. Supporting Canadian English literacy! 🇨🇦</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
