@@ -474,8 +474,14 @@ footer {
     }
     
     nav ul {
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    nav a {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
     }
 }
 
