@@ -20,7 +20,7 @@
     <meta property="twitter:title" content="Canadian English Words for Kids">
     <meta property="twitter:description" content="Interactive English word learning with pronunciation and phonics!">
     
-    <link rel="stylesheet" href="css/styles.css?v=2025081701">
+    <link rel="stylesheet" href="css/styles.css?v=2025081702">
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 </head>
 <body>
@@ -31,9 +31,9 @@
 
     <nav>
         <ul>
-            <li><a href="index.html">🏠 Home</a></li>
-            <li><a href="english.html" class="active">🇨🇦 English Words</a></li>
-            <li><a href="french.html">🇫🇷 French Words</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="english.html">English Words</a></li>
+            <li><a href="french.html">French Words</a></li>
         </ul>
     </nav>
 
@@ -82,39 +82,33 @@
         <!-- Educational Information -->
         <section class="info-section fade-in" style="margin-top: 2rem;">
             <h2>📖 About English Word Categories</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-                <div style="background: #fff3e0; padding: 1.5rem; border-radius: 15px;">
+            <div class="feature-grid">
+                <div class="feature-box bg-soft-orange">
                     <h3 style="color: #FF9800;">🔤 Simple Words</h3>
                     <p>Basic CVC (consonant-vowel-consonant) words like <strong>cat</strong>, <strong>dog</strong>, <strong>run</strong>. Perfect for beginning readers!</p>
                 </div>
-                
-                <div style="background: #e8f5e8; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-green">
                     <h3 style="color: #4CAF50;">📝 Digraphs</h3>
                     <p>Two letters that make one sound: <strong>sh</strong> (ship), <strong>ch</strong> (chat), <strong>th</strong> (that), <strong>ph</strong> (phone), <strong>wh</strong> (when).</p>
                 </div>
-                
-                <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-blue">
                     <h3 style="color: #2196F3;">🎯 Trigraphs</h3>
                     <p>Three letters, one sound: <strong>tch</strong> (catch), <strong>igh</strong> (light), <strong>dge</strong> (bridge). Advanced phonics patterns!</p>
                 </div>
-                
-                <div style="background: #f3e5f5; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-purple">
                     <h3 style="color: #9C27B0;">🔀 Blends</h3>
                     <p>Consonant clusters: <strong>bl</strong> (blue), <strong>st</strong> (stop), <strong>spr</strong> (spring). Each letter sound is heard!</p>
                 </div>
-                
-                <div style="background: #fff9c4; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-yellow">
                     <h3 style="color: #F57F17;">👥 Vowel Teams</h3>
                     <p>Two vowels working together: <strong>ea</strong> (bean), <strong>oa</strong> (boat), <strong>ai</strong> (rain), <strong>ee</strong> (tree).</p>
                 </div>
-                
-                <div style="background: #fce4ec; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-pink">
                     <h3 style="color: #E91E63;">✨ Magic E</h3>
                     <p>Silent 'e' changes vowel sounds: <strong>hop</strong> → <strong>hope</strong>, <strong>cap</strong> → <strong>cape</strong>. Like magic!</p>
                 </div>
             </div>
-            
-            <div style="background: #f5f5f5; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+            <div class="feature-box bg-soft-grey" style="padding: 2rem; margin: 2rem 0;">
                 <h3 style="color: #333;">🎓 Educational Benefits</h3>
                 <ul style="text-align: left; max-width: 800px; margin: 1rem auto;">
                     <li><strong>Phonemic Awareness:</strong> Understanding letter-sound relationships</li>
@@ -129,16 +123,16 @@
     </main>
 
     <!-- Floating Game Button -->
-    <button class="floating-game-btn" id="floating-game-btn" title="Play English Word Games!">
-        <span>🎮</span>
+    <button class="floating-game-btn" id="floating-game-btn" title="Play English Word Games!" aria-label="Open word game">
+        <span aria-hidden="true">🎮</span>
         <span>Word Game</span>
     </button>
 
     <!-- Word Game Modal -->
-    <div id="game-modal" class="game-modal">
-        <div class="game-container">
+    <div id="game-modal" class="game-modal" role="dialog" aria-modal="true" aria-labelledby="game-title" aria-describedby="game-word">
+        <div class="game-container" tabindex="-1">
             <div class="game-header">
-                <h2>🎮 Fill in the Missing Letters!</h2>
+                <h2 id="game-title">🎮 Fill in the Missing Letters!</h2>
                 <div class="game-stats">
                     <span class="score">Score: <span id="game-score">0/10</span></span>
                     <span class="timer">⏰ <span id="game-timer">10</span>s</span>

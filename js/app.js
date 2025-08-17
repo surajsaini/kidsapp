@@ -1,6 +1,6 @@
 /**
  * Kid-Friendly Word Learning Website - Main JavaScript
- * Handles word display, pronunciation, favorites, analytics, and filtering
+ * Handles word display, pronunciation, word games, and filtering
  */
 
 class WordLearningApp {
@@ -11,6 +11,13 @@ class WordLearningApp {
         this.language = 'english'; // Default language
         this.currentFilter = 'all';
         this.clickedWords = []; // Track last 10 clicked words
+        this.wordLookup = new Map(); // Fast lookup by word text
+        // Cached DOM references (populated after DOMContentLoaded / setup)
+        this.dom = {
+            wordsGrid: null,
+            currentWord: null,
+            currentPhonics: null
+        };
         
         // Speech synthesis setup
         this.synth = window.speechSynthesis;
@@ -84,23 +91,11 @@ class WordLearningApp {
      * Get appropriate voice for current language
      */
     getVoice() {
-        if (this.voices.length === 0) return null;
-        
+        if (!this.voices || this.voices.length === 0) return null;
         if (this.language === 'french') {
-            // Try to find Canadian French, then French voices
-            return this.voices.find(voice => 
-                voice.lang.includes('fr-CA') || 
-                voice.lang.includes('fr-FR') || 
-                voice.lang.includes('fr')
-            ) || this.voices[0];
-        } else {
-            // Try to find Canadian English, then US English voices
-            return this.voices.find(voice => 
-                voice.lang.includes('en-CA') || 
-                voice.lang.includes('en-US') || 
-                voice.lang.includes('en')
-            ) || this.voices[0];
+            return this.voices.find(v => v.lang.includes('fr-CA') || v.lang.includes('fr-FR') || v.lang.includes('fr')) || this.voices[0];
         }
+        return this.voices.find(v => v.lang.includes('en-CA') || v.lang.includes('en-US') || v.lang.includes('en')) || this.voices[0];
     }
 
     /**
@@ -118,6 +113,9 @@ class WordLearningApp {
             
             this.words = await response.json();
             this.filteredWords = [...this.words];
+            // Build lookup map
+            this.wordLookup.clear();
+            this.words.forEach(w => { if (w && w.word) this.wordLookup.set(w.word, w); });
             
             // Ensure words are valid
             if (!Array.isArray(this.words) || this.words.length === 0) {
@@ -137,6 +135,10 @@ class WordLearningApp {
      */
     setupWordPage() {
         this.renderWords();
+        // Cache DOM references post-render
+        this.dom.wordsGrid = document.getElementById('words-grid');
+        this.dom.currentWord = document.querySelector('.current-word');
+        this.dom.currentPhonics = document.querySelector('.current-phonics');
         this.updateCurrentWordDisplay();
         this.setupFilterOptions();
     }
@@ -183,8 +185,20 @@ class WordLearningApp {
             floatingGameBtn.addEventListener('click', () => this.startWordGame());
         }
 
+        // Delegate clicks for word buttons (performance improvement)
+        const wordsGrid = document.getElementById('words-grid');
+        if (wordsGrid) {
+            wordsGrid.addEventListener('click', (e) => {
+                const btn = e.target.closest('.word-btn');
+                if (!btn) return;
+                const wordText = btn.dataset.word;
+                const wordObj = this.wordLookup.get(wordText);
+                if (wordObj) this.onWordButtonSelected(btn, wordObj);
+            });
+        }
+
         // Current word display click to repeat
-        const currentWordDisplay = document.querySelector('.current-word');
+        const currentWordDisplay = this.dom.currentWord || document.querySelector('.current-word');
         if (currentWordDisplay) {
             currentWordDisplay.addEventListener('click', () => {
                 if (this.currentWord) {
@@ -193,6 +207,17 @@ class WordLearningApp {
             });
             currentWordDisplay.style.cursor = 'pointer';
             currentWordDisplay.title = 'Click to repeat pronunciation';
+            // Add accessibility attributes
+            currentWordDisplay.setAttribute('role', 'button');
+            currentWordDisplay.setAttribute('tabindex', '0');
+            currentWordDisplay.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (this.currentWord) {
+                        this.speakWord(this.currentWord);
+                    }
+                }
+            });
         }
 
         // Setup sticky scroll behavior
@@ -341,7 +366,7 @@ class WordLearningApp {
      * Render words in the grid
      */
     renderWords() {
-        const wordsGrid = document.getElementById('words-grid');
+        const wordsGrid = this.dom.wordsGrid || document.getElementById('words-grid');
         if (!wordsGrid) {
             console.error('Words grid element not found');
             return;
@@ -355,10 +380,13 @@ class WordLearningApp {
         // Clear loading state
         wordsGrid.innerHTML = '';
         
+        // Build document fragment for efficiency
+        const frag = document.createDocumentFragment();
         this.filteredWords.forEach(wordObj => {
             const wordBtn = this.createWordButton(wordObj);
-            wordsGrid.appendChild(wordBtn);
+            frag.appendChild(wordBtn);
         });
+        wordsGrid.appendChild(frag);
     }
 
     /**
@@ -373,33 +401,35 @@ class WordLearningApp {
         const button = document.createElement('button');
         button.className = 'word-btn';
         button.textContent = wordObj.word;
+        button.dataset.word = wordObj.word;
         
         // Add clicked class if this is the current word
         if (this.currentWord && this.currentWord.word === wordObj.word) {
             button.classList.add('clicked');
         }
 
-        // Add event listeners
-        button.addEventListener('click', () => this.onWordClick(wordObj));
-
         return button;
     }
 
     /**
-     * Handle word button click
+     * Handle delegated word button selection without full re-render
      */
-    onWordClick(wordObj) {
+    onWordButtonSelected(buttonEl, wordObj) {
+        // Update previous clicked button class
+        if (this.currentWord && this.currentWord.word !== wordObj.word) {
+            const prev = document.querySelector('.word-btn.clicked');
+            if (prev) prev.classList.remove('clicked');
+        }
+        // Set new current word
         this.currentWord = wordObj;
+        buttonEl.classList.add('clicked');
         this.updateCurrentWordDisplay();
         this.speakWord(wordObj);
         this.addToClickedWords(wordObj.word);
-        this.renderWords(); // Re-render to update clicked state
-        
-        // Add bounce animation
-        const currentWordElement = document.querySelector('.current-word');
-        if (currentWordElement) {
-            currentWordElement.classList.remove('bounce');
-            setTimeout(() => currentWordElement.classList.add('bounce'), 10);
+        // Bounce animation
+        if (this.dom.currentWord) {
+            this.dom.currentWord.classList.remove('bounce');
+            setTimeout(() => this.dom.currentWord && this.dom.currentWord.classList.add('bounce'), 10);
         }
     }
 
@@ -444,8 +474,8 @@ class WordLearningApp {
      * Update current word display
      */
     updateCurrentWordDisplay() {
-        const currentWordElement = document.querySelector('.current-word');
-        const currentPhonicsElement = document.querySelector('.current-phonics');
+    const currentWordElement = this.dom.currentWord || document.querySelector('.current-word');
+    const currentPhonicsElement = this.dom.currentPhonics || document.querySelector('.current-phonics');
         
         if (this.currentWord) {
             if (currentWordElement) {
@@ -553,6 +583,11 @@ class WordLearningApp {
      * Start the word game
      */
     startWordGame() {
+        // Guard: prevent starting a new game if one is already active
+        const modal = document.getElementById('game-modal');
+        if (this.gameState && modal && modal.style.display === 'flex') {
+            return; // Game already running
+        }
         this.initializeGame();
         this.showGameModal();
         this.startNewGameRound();
@@ -631,6 +666,14 @@ class WordLearningApp {
         if (modal) {
             modal.style.display = 'flex';
             this.setupGameEventListeners();
+            // Accessibility: focus management
+            this.previousFocus = document.activeElement;
+            const container = modal.querySelector('.game-container');
+            if (container) {
+                container.setAttribute('tabindex', '-1');
+                container.focus();
+            }
+            this.enableFocusTrap();
         }
     }
 
@@ -642,6 +685,7 @@ class WordLearningApp {
         const closeBtn = document.getElementById('close-game');
         if (closeBtn) {
             closeBtn.onclick = () => this.closeGame();
+            closeBtn.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.closeGame(); } };
         }
 
         // Listen again button
@@ -654,18 +698,21 @@ class WordLearningApp {
         const letterOptions = document.querySelectorAll('.letter-option');
         letterOptions.forEach(btn => {
             btn.onclick = () => this.selectLetter(btn.dataset.letter);
+            btn.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.selectLetter(btn.dataset.letter); } };
         });
 
         // Play again button
         const playAgainBtn = document.getElementById('play-again-btn');
         if (playAgainBtn) {
             playAgainBtn.onclick = () => this.startWordGame();
+            playAgainBtn.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.startWordGame(); } };
         }
 
         // Close results button
         const closeResultsBtn = document.getElementById('close-results-btn');
         if (closeResultsBtn) {
             closeResultsBtn.onclick = () => this.closeGame();
+            closeResultsBtn.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.closeGame(); } };
         }
     }
 
@@ -901,22 +948,15 @@ class WordLearningApp {
         const isCorrect = letter === this.gameState.correctAnswer;
         
         if (isCorrect) {
-            this.gameState.score++;
-            this.playSound('correct');
-            this.showFeedback(true, '🎉 Correct! Well done!');
+            this.gameState.score++; this.playSound('correct'); this.showFeedback(true, '🎉 Correct! Well done!');
         } else {
-            this.playSound('wrong');
-            this.showFeedback(false, `😔 Wrong! Correct answer: ${this.gameState.correctAnswer}`);
+            this.playSound('wrong'); this.showFeedback(false, `😔 Wrong! Correct answer: ${this.gameState.correctAnswer}`);
         }
         
-        // Update button styles
         const buttons = document.querySelectorAll('.letter-option');
         buttons.forEach(btn => {
-            if (btn.dataset.letter === letter) {
-                btn.classList.add(isCorrect ? 'correct' : 'wrong');
-            } else if (btn.dataset.letter === this.gameState.correctAnswer) {
-                btn.classList.add('correct');
-            }
+            if (btn.dataset.letter === letter) btn.classList.add(isCorrect ? 'correct' : 'wrong');
+            else if (btn.dataset.letter === this.gameState.correctAnswer) btn.classList.add('correct');
             btn.disabled = true;
         });
         
@@ -1015,13 +1055,14 @@ class WordLearningApp {
         if (modal) {
             modal.style.display = 'none';
         }
-        
-        // Clean up
         if (this.gameState && this.gameState.timer) {
             clearInterval(this.gameState.timer);
         }
-        
         this.gameState = null;
+        this.disableFocusTrap();
+        if (this.previousFocus && typeof this.previousFocus.focus === 'function') {
+            try { this.previousFocus.focus(); } catch(_) {}
+        }
     }
 
     /**
@@ -1097,15 +1138,30 @@ class WordLearningApp {
     }
 
     /**
-     * Load data from localStorage
+     * Enable focus trap within the game modal
      */
-    loadFromStorage(key) {
-        try {
-            const data = localStorage.getItem(`wordApp_${key}`);
-            return data ? JSON.parse(data) : null;
-        } catch (error) {
-            return null;
-        }
+    enableFocusTrap() {
+        if (this.focusTrapHandler) return;
+        this.focusTrapHandler = (e) => {
+            const modal = document.getElementById('game-modal');
+            if (!modal || modal.style.display !== 'flex') return;
+            if (e.key === 'Escape') { e.preventDefault(); this.closeGame(); return; }
+            if (e.key !== 'Tab') return;
+            const selectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            const focusable = Array.from(modal.querySelectorAll(selectors)).filter(el => !el.disabled && el.getAttribute('aria-hidden') !== 'true');
+            if (!focusable.length) return;
+            const first = focusable[0]; const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        };
+        document.addEventListener('keydown', this.focusTrapHandler, true);
+    }
+
+    /**
+     * Disable focus trap
+     */
+    disableFocusTrap() {
+        if (this.focusTrapHandler) { document.removeEventListener('keydown', this.focusTrapHandler, true); this.focusTrapHandler = null; }
     }
 }
 

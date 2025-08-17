@@ -20,7 +20,7 @@
     <meta property="twitter:title" content="Mots Français pour Enfants">
     <meta property="twitter:description" content="Apprentissage interactif des mots français avec prononciation et phonétique!">
     
-    <link rel="stylesheet" href="css/styles.css?v=2025081701">
+    <link rel="stylesheet" href="css/styles.css?v=2025081702">
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 </head>
 <body>
@@ -31,9 +31,9 @@
 
     <nav>
         <ul>
-            <li><a href="index.html">🏠 Accueil</a></li>
-            <li><a href="english.html">🇨🇦 Mots Anglais</a></li>
-            <li><a href="french.html" class="active">🇫🇷 Mots Français</a></li>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="english.html">Mots Anglais</a></li>
+            <li><a href="french.html">Mots Français</a></li>
         </ul>
     </nav>
 
@@ -82,39 +82,33 @@
         <!-- Educational Information -->
         <section class="info-section fade-in" style="margin-top: 2rem;">
             <h2>📖 À Propos des Catégories de Mots Français</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-                <div style="background: #fff3e0; padding: 1.5rem; border-radius: 15px;">
+            <div class="feature-grid">
+                <div class="feature-box bg-soft-orange">
                     <h3 style="color: #FF9800;">🔤 Mots Simples</h3>
                     <p>Mots de base comme <strong>ami</strong>, <strong>bon</strong>, <strong>rue</strong>. Parfait pour les débutants en lecture!</p>
                 </div>
-                
-                <div style="background: #e8f5e8; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-green">
                     <h3 style="color: #4CAF50;">📝 Digrammes</h3>
                     <p>Deux lettres qui font un son: <strong>ch</strong> (chat), <strong>ph</strong> (photo), <strong>th</strong> (thé), <strong>gn</strong> (ligne).</p>
                 </div>
-                
-                <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-blue">
                     <h3 style="color: #2196F3;">🎯 Mélanges</h3>
                     <p>Groupes de consonnes: <strong>bl</strong> (bleu), <strong>cl</strong> (clé), <strong>tr</strong> (trois), <strong>pr</strong> (prix). Chaque son de lettre est entendu!</p>
                 </div>
-                
-                <div style="background: #f3e5f5; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-purple">
                     <h3 style="color: #9C27B0;">👥 Équipes de Voyelles</h3>
                     <p>Deux voyelles travaillant ensemble: <strong>eau</strong> (bateau), <strong>ou</strong> (loup), <strong>oi</strong> (roi), <strong>ai</strong> (pain).</p>
                 </div>
-                
-                <div style="background: #fff9c4; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-yellow">
                     <h3 style="color: #F57F17;">🔇 Lettres Muettes</h3>
                     <p>Lettres qu'on ne prononce pas: <strong>temps</strong>, <strong>doigt</strong>, <strong>vingt</strong>. Important en français!</p>
                 </div>
-                
-                <div style="background: #fce4ec; padding: 1.5rem; border-radius: 15px;">
+                <div class="feature-box bg-soft-pink">
                     <h3 style="color: #E91E63;">🔀 Consonnes Doubles</h3>
                     <p>Consonnes répétées: <strong>bille</strong>, <strong>motte</strong>, <strong>bulle</strong>. Sons spéciaux français!</p>
                 </div>
             </div>
-            
-            <div style="background: #f5f5f5; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+            <div class="feature-box bg-soft-grey" style="padding: 2rem; margin: 2rem 0;">
                 <h3 style="color: #333;">🎓 Avantages Éducatifs</h3>
                 <ul style="text-align: left; max-width: 800px; margin: 1rem auto;">
                     <li><strong>Conscience Phonémique:</strong> Comprendre les relations lettre-son</li>
@@ -143,8 +137,8 @@
     </main>
 
     <!-- Floating Game Button -->
-    <button class="floating-game-btn" id="floating-game-btn" title="Jouer aux Jeux de Mots Français!">
-        <span>🎮</span>
+    <button class="floating-game-btn" id="floating-game-btn" title="Jouer aux Jeux de Mots Français!" aria-label="Ouvrir le jeu de mots">
+        <span aria-hidden="true">🎮</span>
         <span>Jeu de Mots</span>
     </button>
 
@@ -153,10 +147,10 @@
     </footer>
 
     <!-- Game Modal -->
-    <div id="game-modal" class="game-modal">
-        <div class="game-container">
+    <div id="game-modal" class="game-modal" role="dialog" aria-modal="true" aria-labelledby="game-title-fr" aria-describedby="game-word">
+        <div class="game-container" tabindex="-1">
             <div class="game-header">
-                <h2>🎮 Jeu de Mots Français</h2>
+                <h2 id="game-title-fr">🎮 Jeu de Mots Français</h2>
                 <div class="game-stats">
                     <span class="score">Score: <span id="game-score">0/10</span></span>
                     <span class="timer">⏰ <span id="game-timer">10</span>s</span>
