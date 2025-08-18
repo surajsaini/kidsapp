@@ -10,13 +10,11 @@ class WordLearningApp {
         this.currentWord = null;
         this.language = 'english'; // Default language
         this.currentFilter = 'all';
-        this.clickedWords = []; // Track last 10 clicked words
+        this.clickedWords = []; // Track last 20 clicked words
         this.wordLookup = new Map(); // Fast lookup by word text
         // Cached DOM references (populated after DOMContentLoaded / setup)
         this.dom = {
-            wordsGrid: null,
-            currentWord: null,
-            currentPhonics: null
+            wordsGrid: null
         };
         
         // Speech synthesis setup
@@ -137,9 +135,6 @@ class WordLearningApp {
         this.renderWords();
         // Cache DOM references post-render
         this.dom.wordsGrid = document.getElementById('words-grid');
-        this.dom.currentWord = document.querySelector('.current-word');
-        this.dom.currentPhonics = document.querySelector('.current-phonics');
-        this.updateCurrentWordDisplay();
         this.setupFilterOptions();
     }
 
@@ -197,77 +192,9 @@ class WordLearningApp {
             });
         }
 
-        // Current word display click to repeat
-        const currentWordDisplay = this.dom.currentWord || document.querySelector('.current-word');
-        if (currentWordDisplay) {
-            currentWordDisplay.addEventListener('click', () => {
-                if (this.currentWord) {
-                    this.speakWord(this.currentWord);
-                }
-            });
-            currentWordDisplay.style.cursor = 'pointer';
-            currentWordDisplay.title = 'Click to repeat pronunciation';
-            // Add accessibility attributes
-            currentWordDisplay.setAttribute('role', 'button');
-            currentWordDisplay.setAttribute('tabindex', '0');
-            currentWordDisplay.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    if (this.currentWord) {
-                        this.speakWord(this.currentWord);
-                    }
-                }
-            });
-        }
-
-        // Setup sticky scroll behavior
-        this.setupSimpleStickyBehavior();
+        // No longer using current word display or sticky behavior
     }
 
-    /**
-     * Setup sticky behavior only for Words Collection section
-     */
-    setupSimpleStickyBehavior() {
-        const currentWordDisplay = document.querySelector('.current-word-display');
-        const wordsContainer = document.querySelector('.words-container');
-        
-        if (!currentWordDisplay || !wordsContainer) return;
-
-        const handleScroll = () => {
-            const wordsContainerRect = wordsContainer.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            
-            // Check if we're scrolling through the words container
-            const isInWordsSection = (
-                wordsContainerRect.top <= 80 && // Words section has started
-                wordsContainerRect.bottom > 120   // Words section hasn't ended
-            );
-            
-            if (isInWordsSection) {
-                // Show and activate sticky only when in words section
-                currentWordDisplay.style.display = 'block';
-                currentWordDisplay.classList.add('sticky-active');
-                // Add some top padding to words container to prevent overlap
-                wordsContainer.style.paddingTop = '80px';
-            } else {
-                // Hide and deactivate sticky when outside words section
-                currentWordDisplay.style.display = 'none';
-                currentWordDisplay.classList.remove('sticky-active');
-                // Remove extra padding
-                wordsContainer.style.paddingTop = '1.5rem';
-            }
-        };
-
-        // Use optimized scroll handling
-        let scrollTimer = null;
-        window.addEventListener('scroll', () => {
-            if (scrollTimer) clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(handleScroll, 10);
-        }, { passive: true });
-
-        // Initial check
-        handleScroll();
-    }
 
     /**
      * Setup filter options in dropdown
@@ -400,8 +327,21 @@ class WordLearningApp {
         
         const button = document.createElement('button');
         button.className = 'word-btn';
-        button.textContent = wordObj.word;
         button.dataset.word = wordObj.word;
+        
+        // Create word text element
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'word-text';
+        wordSpan.textContent = wordObj.word;
+        
+        // Create phonics element
+        const phonicsSpan = document.createElement('span');
+        phonicsSpan.className = 'word-phonics';
+        phonicsSpan.textContent = `(${wordObj.phonics})`;
+        
+        // Add both to button
+        button.appendChild(wordSpan);
+        button.appendChild(phonicsSpan);
         
         // Add clicked class if this is the current word
         if (this.currentWord && this.currentWord.word === wordObj.word) {
@@ -423,14 +363,8 @@ class WordLearningApp {
         // Set new current word
         this.currentWord = wordObj;
         buttonEl.classList.add('clicked');
-        this.updateCurrentWordDisplay();
         this.speakWord(wordObj);
         this.addToClickedWords(wordObj.word);
-        // Bounce animation
-        if (this.dom.currentWord) {
-            this.dom.currentWord.classList.remove('bounce');
-            setTimeout(() => this.dom.currentWord && this.dom.currentWord.classList.add('bounce'), 10);
-        }
     }
 
     /**
@@ -470,32 +404,10 @@ class WordLearningApp {
         this.synth.speak(utterance);
     }
 
-    /**
-     * Update current word display
-     */
-    updateCurrentWordDisplay() {
-    const currentWordElement = this.dom.currentWord || document.querySelector('.current-word');
-    const currentPhonicsElement = this.dom.currentPhonics || document.querySelector('.current-phonics');
-        
-        if (this.currentWord) {
-            if (currentWordElement) {
-                currentWordElement.textContent = this.currentWord.word;
-            }
-            if (currentPhonicsElement) {
-                currentPhonicsElement.textContent = `(${this.currentWord.phonics})`;
-            }
-        } else {
-            if (currentWordElement) {
-                currentWordElement.textContent = 'Click a word to hear it!';
-            }
-            if (currentPhonicsElement) {
-                currentPhonicsElement.textContent = '';
-            }
-        }
-    }
+
 
     /**
-     * Add word to clicked words list (for last 10 functionality)
+     * Add word to clicked words list (for last 20 functionality)
      */
     addToClickedWords(word) {
         // Remove if already in list
@@ -507,15 +419,15 @@ class WordLearningApp {
         // Add to beginning
         this.clickedWords.unshift(word);
         
-        // Keep only last 10
-        this.clickedWords = this.clickedWords.slice(0, 10);
+        // Keep only last 20
+        this.clickedWords = this.clickedWords.slice(0, 20);
     }
 
     /**
      * Show random words
      */
     showRandomWords() {
-        const randomWords = this.getRandomWords(10);
+        const randomWords = this.getRandomWords(20);
         this.filteredWords = randomWords;
         this.renderWords();
         
@@ -525,7 +437,7 @@ class WordLearningApp {
         if (searchBar) searchBar.value = '';
         if (filterSelect) filterSelect.value = 'all';
         
-        this.showToast('Showing 10 random words!');
+        this.showToast('Showing 20 random words!');
     }
 
     /**
@@ -537,7 +449,7 @@ class WordLearningApp {
     }
 
     /**
-     * Show last 10 clicked words
+     * Show last 20 clicked words
      */
     showLastClickedWords() {
         if (this.clickedWords.length === 0) {
@@ -583,11 +495,15 @@ class WordLearningApp {
      * Start the word game
      */
     startWordGame() {
-        // Guard: prevent starting a new game if one is already active
+        // Guard: prevent starting a new game if one is already active (but allow restart from results screen)
         const modal = document.getElementById('game-modal');
-        if (this.gameState && modal && modal.style.display === 'flex') {
-            return; // Game already running
+        const gameResults = document.getElementById('game-results');
+        const isResultsVisible = gameResults && gameResults.style.display !== 'none';
+        
+        if (this.gameState && modal && modal.style.display === 'flex' && !isResultsVisible) {
+            return; // Game already running (but not on results screen)
         }
+        
         this.initializeGame();
         this.showGameModal();
         this.startNewGameRound();
@@ -665,6 +581,16 @@ class WordLearningApp {
         const modal = document.getElementById('game-modal');
         if (modal) {
             modal.style.display = 'flex';
+            
+            // Ensure header elements are visible (in case they were hidden on results screen)
+            const scoreElement = document.querySelector('.score');
+            const timerElement = document.querySelector('.timer');
+            const closeButton = document.getElementById('close-game');
+            
+            if (scoreElement) scoreElement.style.display = 'block';
+            if (timerElement) timerElement.style.display = 'block';
+            if (closeButton) closeButton.style.display = 'block';
+            
             this.setupGameEventListeners();
             // Accessibility: focus management
             this.previousFocus = document.activeElement;
@@ -1025,6 +951,15 @@ class WordLearningApp {
         // Hide game content, show results
         document.querySelector('.game-content').style.display = 'none';
         document.getElementById('game-results').style.display = 'block';
+        
+        // Hide header elements on results screen
+        const scoreElement = document.querySelector('.score');
+        const timerElement = document.querySelector('.timer');
+        const closeButton = document.getElementById('close-game');
+        
+        if (scoreElement) scoreElement.style.display = 'none';
+        if (timerElement) timerElement.style.display = 'none';
+        if (closeButton) closeButton.style.display = 'none';
         
         // Update final score
         document.getElementById('final-score').textContent = 

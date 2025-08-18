@@ -365,6 +365,26 @@ main {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     font-family: inherit;
     text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 80px;
+}
+
+.word-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.word-phonics {
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: #666;
+    text-transform: none;
+    font-style: italic;
+    line-height: 1;
 }
 
 .word-btn:hover {
@@ -373,14 +393,26 @@ main {
     box-shadow: 0 6px 16px rgba(0,0,0,0.2);
 }
 
+.word-btn:hover .word-phonics {
+    color: #555;
+}
+
 .word-btn.favorite {
     background: linear-gradient(45deg, #E91E63, #AD1457);
     color: white;
 }
 
+.word-btn.favorite .word-phonics {
+    color: #FFB6C1;
+}
+
 .word-btn.clicked {
     background: linear-gradient(45deg, #4CAF50, #2E7D32);
     color: white;
+}
+
+.word-btn.clicked .word-phonics {
+    color: #C8E6C9;
 }
 
 
@@ -459,8 +491,19 @@ footer {
     }
     
     .word-btn {
-        padding: 0.8rem;
+        padding: 1rem 0.8rem;
         font-size: 1rem;
+        min-height: 85px;
+        gap: 0.4rem;
+    }
+    
+    .word-text {
+        font-size: 1rem;
+    }
+    
+    .word-phonics {
+        font-size: 0.85rem;
+        color: #666;
     }
     
     .control-buttons {
@@ -479,16 +522,24 @@ footer {
         padding: 1.5rem;
     }
     
-    .current-word {
-        font-size: 2rem;
-    }
-    
-    .current-phonics {
-        font-size: 1.2rem;
-    }
-    
     .words-grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 0.6rem;
+    }
+    
+    .word-btn {
+        padding: 0.8rem 0.5rem;
+        min-height: 80px;
+        gap: 0.3rem;
+    }
+    
+    .word-text {
+        font-size: 0.9rem;
+    }
+    
+    .word-phonics {
+        font-size: 0.75rem;
+        color: #666;
     }
 }
 
@@ -759,10 +810,10 @@ footer {
 /* Floating Game Button */
 .floating-game-btn {
     position: fixed;
-    bottom: 40px;
-    right: 20px;
-    width: 160px;
-    height: 55px;
+    bottom: 35px;
+    right: 15px;
+    width: 155px;
+    height: 50px;
     background: linear-gradient(45deg, #FF9800, #E91E63);
     border: none;
     border-radius: 25px;
@@ -774,8 +825,8 @@ footer {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-size: 1.4rem;
+    gap: 6px;
+    font-size: 1.1rem;
     font-weight: bold;
     color: white;
     text-decoration: none;
@@ -799,25 +850,14 @@ footer {
     50% { transform: scale(1.05); }
 }
 
-/* Mobile optimization for floating button */
-@media (max-width: 768px) {
-    .floating-game-btn {
-        width: 145px;
-        height: 50px;
-        bottom: 35px;
-        right: 15px;
-        font-size: 1.2rem;
-        gap: 6px;
-    }
-}
-
+/* Mobile optimization for floating button - only very small screens need adjustment */
 @media (max-width: 480px) {
     .floating-game-btn {
-        width: 135px;
+        width: 125px;
         height: 45px;
         bottom: 30px;
         right: 10px;
-        font-size: 1.1rem;
+        font-size: 1rem;
         gap: 5px;
     }
 }
